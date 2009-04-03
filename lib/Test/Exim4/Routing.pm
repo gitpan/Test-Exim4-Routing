@@ -63,7 +63,7 @@ except in the C<config_ok> check.
 =cut
 
 use vars qw'@ISA $mailer @EXPORT_OK $VERSION';
-$VERSION = '0.01';
+$VERSION = '0.02';
 BEGIN { @EXPORT_OK = qw(&routes_ok &routes_as &discards_ok &undeliverable_ok &config_ok) };
 $mailer = '/usr/sbin/exim4';
 
@@ -165,7 +165,7 @@ sub undeliverable_ok {
     $name ||= "$address is undeliverable";
     my @output = `$mailer -bt '$address' 2>&1`;
     my $Test = Test::Builder->new;
-    (my $router) = grep /\Q$address\E/, @output;
+    (my $router) = grep /\Q$address\E is undeliverable/, @output;
     $Test->like( $router, qr/\bis undeliverable\b/, $name )
         or $Test->diag( join "\n", @output );
 };
